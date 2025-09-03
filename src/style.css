@@ -1224,12 +1224,219 @@ img {
   border: 0;
 }
 
+/* User Registration Styles */
+.user-registration-dialog {
+  min-width: 400px;
+  max-width: 500px;
+  width: 90%;
+}
+
+.registration-header {
+  margin-bottom: 1rem;
+}
+
+.registration-icon {
+  width: 4rem;
+  height: 4rem;
+  background: linear-gradient(135deg, var(--secondary-blue) 0%, var(--primary-blue) 100%);
+  border-radius: 50%;
+  padding: 1rem;
+}
+
+.registration-subtitle {
+  color: var(--text-secondary);
+  font-size: 1.4rem;
+  margin: 0;
+}
+
+.username-input {
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 1.6rem;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.username-input:focus {
+  border-color: var(--secondary-blue);
+  box-shadow: 0 0 0 3px rgba(50, 130, 184, 0.2);
+  outline: none;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.username-input::placeholder {
+  color: rgba(187, 225, 250, 0.6);
+}
+
+.username-help {
+  color: var(--text-secondary);
+  font-size: 1.2rem;
+  margin: 0;
+  opacity: 0.8;
+}
+
+.error-message {
+  background: rgba(231, 76, 60, 0.1);
+  border: 1px solid var(--error);
+  color: var(--error);
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 1.3rem;
+  margin: 0;
+  animation: errorShake 0.5s ease-in-out;
+}
+
+.success-message {
+  background: rgba(39, 174, 96, 0.1);
+  border: 1px solid var(--success);
+  color: var(--success);
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 1.3rem;
+  margin: 0;
+  animation: successPulse 0.5s ease-in-out;
+}
+
+@keyframes errorShake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+@keyframes successPulse {
+  0% { transform: scale(0.95); opacity: 0; }
+  50% { transform: scale(1.02); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.join-btn {
+  background: linear-gradient(135deg, var(--success) 0%, #27AE60 100%);
+  min-width: 120px;
+  font-weight: 600;
+}
+
+.join-btn:hover {
+  background: linear-gradient(135deg, #27AE60 0%, var(--success) 100%);
+  box-shadow: 0 8px 25px rgba(39, 174, 96, 0.4);
+}
+
+.join-btn:disabled {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.5);
+  cursor: not-allowed;
+  transform: none;
+}
+
+.cancel-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid var(--border-color);
+  color: var(--text-secondary);
+  min-width: 120px;
+}
+
+.cancel-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: var(--error);
+  color: var(--error);
+}
+
+.online-users-section {
+  border-top: 1px solid var(--border-color);
+  padding-top: 1.5rem;
+  margin-top: 1rem;
+}
+
+.online-users-header {
+  color: var(--text-secondary);
+  font-size: 1.4rem;
+  margin: 0;
+  font-weight: 600;
+}
+
+.online-users-list {
+  min-height: 40px;
+  max-height: 100px;
+  overflow-y: auto;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-color);
+  padding: 8px;
+}
+
+.online-user-tag {
+  background: rgba(50, 130, 184, 0.2);
+  color: var(--text-primary);
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 1.2rem;
+  border: 1px solid rgba(50, 130, 184, 0.3);
+  white-space: nowrap;
+  animation: userTagFadeIn 0.3s ease-out;
+}
+
+@keyframes userTagFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.online-users-empty {
+  color: var(--text-secondary);
+  font-style: italic;
+  opacity: 0.7;
+  font-size: 1.2rem;
+}
+
+/* Connection status indicator */
+.connection-status {
+  position: fixed;
+  top: 70px;
+  right: 20px;
+  z-index: 1001;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  text-transform: lowercase;
+  backdrop-filter: blur(10px);
+  border: 1px solid;
+  transition: all 0.3s ease;
+}
+
+.connection-status.connected {
+  background: rgba(39, 174, 96, 0.1);
+  border-color: var(--success);
+  color: var(--success);
+}
+
+.connection-status.disconnected {
+  background: rgba(231, 76, 60, 0.1);
+  border-color: var(--error);
+  color: var(--error);
+}
+
+.connection-status.connecting {
+  background: rgba(241, 143, 1, 0.1);
+  border-color: var(--warning);
+  color: var(--warning);
+}
+
 /* Print styles */
 @media print {
   .btn,
   .icon_container,
   .tutorial-btn-container,
-  .home-btn-container {
+  .home-btn-container,
+  .user-registration-dialog,
+  .connection-status {
     display: none;
   }
   

@@ -7,6 +7,7 @@ import createRoundWinPage from './dom_module/round-win-modal.js';
 import createTutorialPage from './dom_module/tutorial-page.js';
 
 import GameController from './game-controller.js';
+import userManager from './services/userManager.js';
 
 import './style.css';
 import GameBoard from './game-board.js';
@@ -697,17 +698,24 @@ function playSetupEventListeners(PlaySetupScreen) {
 }
 
 HOME_PAGE_SCREEN.playBtn.addEventListener('click', () => {
-  PLAY_SETUP_SCREEN = createPlaySetupPage();
-  changeScreen(PLAY_SETUP_SCREEN.gameSetupContainer);
+  requireUserRegistration(() => {
+    const currentUser = userManager.getCurrentUser();
+    console.log(`🎮 Starting game for user: ${currentUser?.username}`);
+    
+    PLAY_SETUP_SCREEN = createPlaySetupPage();
+    changeScreen(PLAY_SETUP_SCREEN.gameSetupContainer);
 
-  GAME_CONTROLLER.startRound();
-  botShipSunk = [];
-  humanShipSunk = [];
-  playSetupEventListeners(PLAY_SETUP_SCREEN);
+    GAME_CONTROLLER.startRound();
+    botShipSunk = [];
+    humanShipSunk = [];
+    playSetupEventListeners(PLAY_SETUP_SCREEN);
+  });
 });
 
 HOME_PAGE_SCREEN.tutorialBtn.addEventListener('click', () => {
-  changeScreen(TUTORIAL_PAGE_SCREEN.tutorialPageContainer);
+  requireUserRegistration(() => {
+    changeScreen(TUTORIAL_PAGE_SCREEN.tutorialPageContainer);
+  });
 });
 
 function initialRender() {
@@ -715,11 +723,22 @@ function initialRender() {
 
   LOAD_SCREEN.line.addEventListener('animationend', () => {
     LOAD_SCREEN.loadingScreenContainer.classList.add('loading-complete');
+    
+    // Initialize user manager after loading screen
+    setTimeout(() => {
+      userManager.init();
+    }, 200);
+    
     changeScreen(HOME_PAGE_SCREEN.homePageContainer, 500);
     setTimeout(() => {
       LOAD_SCREEN.loadingScreenContainer.classList.remove('loading-complete');
     }, 650);
   });
+}
+
+// Use event-based registration requirement
+function requireUserRegistration(callback) {
+  userManager.requireRegistration(callback);
 }
 
 initialRender();
