@@ -5,7 +5,7 @@ import HtmlWebpackPlugin from 'html-webpack-plugin';
 const DIRNAME = dirname(fileURLToPath(import.meta.url));
 
 export default {
-  entry: './src/main.js',
+  entry: './src/main-multiplayer.js',
   devtool: 'inline-source-map',
   plugins: [
     new HtmlWebpackPlugin({
