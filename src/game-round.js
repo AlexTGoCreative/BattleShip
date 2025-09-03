@@ -1,5 +1,6 @@
 import HumanPlayer from './human-player.js';
 import ComputerPlayer from './computer-player.js';
+import HardComputer from './hard-computer.js';
 
 export default class GameRound {
   #HUMAN_PLAYER = null;
@@ -7,6 +8,8 @@ export default class GameRound {
   #COMPUTER_PLAYER = null;
 
   #activePlayer = null;
+
+  #AI_DIFFICULTY = 'easy'; // Default to easy
 
   #HIT_STATUS_0 = 0;
 
@@ -29,13 +32,22 @@ export default class GameRound {
   addBotPlayer() {
     if (this.#COMPUTER_PLAYER !== null) return false;
 
-    this.#COMPUTER_PLAYER = new ComputerPlayer();
+    // Create computer player based on difficulty
+    if (this.#AI_DIFFICULTY === 'hard') {
+      this.#COMPUTER_PLAYER = new HardComputer();
+    } else {
+      this.#COMPUTER_PLAYER = new ComputerPlayer();
+    }
 
     if (!this.#canAddPlayer()) {
       this.#activePlayer = this.#COMPUTER_PLAYER;
     }
 
     return true;
+  }
+
+  setAIDifficulty(difficulty) {
+    this.#AI_DIFFICULTY = difficulty;
   }
 
   addHumanPlayer() {

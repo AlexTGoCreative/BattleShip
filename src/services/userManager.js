@@ -1,5 +1,6 @@
 import createUserRegistration from '../dom_module/user-registration.js';
 import socketService from './socketService.js';
+import dashboardManager from './dashboardManager.js';
 
 class UserManager {
   constructor() {
@@ -89,8 +90,9 @@ class UserManager {
 
     socketService.on('socket-disconnected', (reason) => {
       this.updateConnectionStatus('disconnected', 'disconnected');
+      const previousUser = this.currentUser?.username;
       this.currentUser = null;
-      console.log('🔌 Disconnected:', reason);
+      console.log(`🔌 Disconnected: ${reason}${previousUser ? ` (User: ${previousUser} should be removed from DB)` : ''}`);
     });
 
     socketService.on('connection-error', (error) => {
@@ -113,7 +115,10 @@ class UserManager {
       // Close modal after a delay to show success message
       setTimeout(() => {
         this.closeRegistrationModal();
-      }, 2000);
+        // Show dashboard after successful registration
+        console.log('🚀 About to show dashboard...');
+        this.showDashboard();
+      }, 1500);
     });
 
     socketService.on('registration-error', (data) => {
@@ -127,6 +132,17 @@ class UserManager {
 
     socketService.on('user-left', (data) => {
       this.removeOnlineUser(data.username);
+    });
+
+    // Handle logout success - clear user data
+    socketService.on('logout-success', (data) => {
+      console.log('🚪 Logout successful, clearing user data');
+      this.currentUser = null;
+      this.clearRegistrationForm();
+    });
+
+    socketService.on('logout-error', (data) => {
+      console.error('❌ Logout failed:', data.message);
     });
   }
 
@@ -172,6 +188,9 @@ class UserManager {
     console.log('📱 Showing registration modal...');
 
     try {
+      // Clear the form for fresh start
+      this.clearRegistrationForm();
+      
       // Check if dialog is already in DOM
       if (!document.body.contains(this.registrationModal.registrationDialog)) {
         document.body.appendChild(this.registrationModal.registrationDialog);
@@ -220,6 +239,26 @@ class UserManager {
     } catch (error) {
       console.warn('Error closing registration modal:', error);
     }
+  }
+
+  /**
+   * Clear registration form input and messages
+   */
+  clearRegistrationForm() {
+    if (!this.registrationModal) return;
+
+    // Clear username input
+    if (this.registrationModal.usernameInput) {
+      this.registrationModal.usernameInput.value = '';
+    }
+
+    // Hide all messages
+    this.hideMessages();
+
+    // Enable form
+    this.enableRegistrationForm();
+
+    console.log('🧹 Registration form cleared');
   }
 
   /**
@@ -468,8 +507,18 @@ class UserManager {
    * Logout current user
    */
   logout() {
+    console.log('🚪 Logging out user:', this.currentUser?.username);
     socketService.logout();
     this.currentUser = null;
+    this.clearRegistrationForm();
+  }
+
+  /**
+   * Show dashboard after successful login
+   */
+  showDashboard() {
+    console.log('🎮 Showing dashboard for user:', this.currentUser?.username);
+    dashboardManager.show();
   }
 
   /**
@@ -482,6 +531,7 @@ class UserManager {
       document.body.removeChild(this.connectionStatus);
     }
 
+    dashboardManager.destroy();
     socketService.disconnect();
     this.isInitialized = false;
   }

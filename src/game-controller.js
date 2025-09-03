@@ -121,4 +121,18 @@ export default class GameController {
     this.#GAME_ROUND.addHumanPlayer();
     this.#ROUND_START = true;
   }
+
+  startRoundWithDifficulty(difficulty) {
+    this.#GAME_ROUND = new GameRound();
+    this.#GAME_ROUND.setAIDifficulty(difficulty);
+    this.#GAME_ROUND.addBotPlayer();
+    this.#GAME_ROUND.addHumanPlayer();
+    this.#ROUND_START = true;
+  }
+
+  setAIDifficulty(difficulty) {
+    if (this.#GAME_ROUND) {
+      this.#GAME_ROUND.setAIDifficulty(difficulty);
+    }
+  }
 }

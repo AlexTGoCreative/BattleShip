@@ -44,19 +44,37 @@ function closeModal(modalEl) {
 }
 
 TUTORIAL_PAGE_SCREEN.homeBtn.addEventListener('click', () => {
-  changeScreen(HOME_PAGE_SCREEN.homePageContainer);
+  // Check if user is logged in and redirect to dashboard, otherwise go to home page
+  const currentUser = userManager.getCurrentUser();
+  if (currentUser) {
+    userManager.showDashboard();
+  } else {
+    changeScreen(HOME_PAGE_SCREEN.homePageContainer);
+  }
 });
 
 ROUND_LOSS_MODAL.homeBtn.addEventListener('click', () => {
   closeModal(ROUND_LOSS_MODAL.roundLossDialog);
 
-  changeScreen(LOAD_SCREEN.loadingScreenContainer);
+  // Check if user is logged in and redirect to dashboard, otherwise go to home page
+  const currentUser = userManager.getCurrentUser();
+  if (currentUser) {
+    userManager.showDashboard();
+  } else {
+    changeScreen(HOME_PAGE_SCREEN.homePageContainer);
+  }
 });
 
 ROUND_WIN_MODAL.homeBtn.addEventListener('click', () => {
   closeModal(ROUND_WIN_MODAL.roundWinDialog);
 
-  changeScreen(LOAD_SCREEN.loadingScreenContainer);
+  // Check if user is logged in and redirect to dashboard, otherwise go to home page
+  const currentUser = userManager.getCurrentUser();
+  if (currentUser) {
+    userManager.showDashboard();
+  } else {
+    changeScreen(HOME_PAGE_SCREEN.homePageContainer);
+  }
 });
 
 function attachShipToBoard(shipInfo) {
@@ -415,7 +433,13 @@ function gamePlayScreenEventListeners(gamePlayScreen, gameController_) {
   });
 
   homeIconContainer.addEventListener('click', () => {
-    changeScreen(LOAD_SCREEN.loadingScreenContainer);
+    // Check if user is logged in and redirect to dashboard, otherwise go to home page
+    const currentUser = userManager.getCurrentUser();
+    if (currentUser) {
+      userManager.showDashboard();
+    } else {
+      changeScreen(HOME_PAGE_SCREEN.homePageContainer);
+    }
   });
 }
 
@@ -430,7 +454,13 @@ function playSetupEventListeners(PlaySetupScreen) {
   } = PlaySetupScreen;
 
   homeBtn.addEventListener('click', () => {
-    changeScreen(HOME_PAGE_SCREEN.homePageContainer);
+    // Check if user is logged in and redirect to dashboard, otherwise go to home page
+    const currentUser = userManager.getCurrentUser();
+    if (currentUser) {
+      userManager.showDashboard();
+    } else {
+      changeScreen(HOME_PAGE_SCREEN.homePageContainer);
+    }
   });
 
   shipsElementArr.forEach((ship) => {
@@ -700,15 +730,10 @@ function playSetupEventListeners(PlaySetupScreen) {
 HOME_PAGE_SCREEN.playBtn.addEventListener('click', () => {
   requireUserRegistration(() => {
     const currentUser = userManager.getCurrentUser();
-    console.log(`🎮 Starting game for user: ${currentUser?.username}`);
+    console.log(`🎮 User registered: ${currentUser?.username} - showing dashboard`);
     
-    PLAY_SETUP_SCREEN = createPlaySetupPage();
-    changeScreen(PLAY_SETUP_SCREEN.gameSetupContainer);
-
-    GAME_CONTROLLER.startRound();
-    botShipSunk = [];
-    humanShipSunk = [];
-    playSetupEventListeners(PLAY_SETUP_SCREEN);
+    // Show dashboard instead of going directly to game setup
+    userManager.showDashboard();
   });
 });
 
@@ -740,5 +765,41 @@ function initialRender() {
 function requireUserRegistration(callback) {
   userManager.requireRegistration(callback);
 }
+
+// Dashboard event listeners
+window.addEventListener('startAIGame', (event) => {
+  const { difficulty } = event.detail;
+  console.log(`🎮 Starting AI game with ${difficulty} difficulty`);
+  
+  // Create new play setup screen with AI configuration
+  PLAY_SETUP_SCREEN = createPlaySetupPage();
+  
+  // Navigate to game setup
+  changeScreen(PLAY_SETUP_SCREEN.gameSetupContainer);
+  
+  // Start game round with AI difficulty and setup event listeners
+  GAME_CONTROLLER.startRoundWithDifficulty(difficulty);
+  botShipSunk = [];
+  humanShipSunk = [];
+  playSetupEventListeners(PLAY_SETUP_SCREEN);
+});
+
+window.addEventListener('startTutorial', () => {
+  console.log('📚 Starting tutorial');
+  changeScreen(TUTORIAL_PAGE_SCREEN.tutorialPageContainer);
+});
+
+window.addEventListener('openSettings', () => {
+  console.log('⚙️ Opening settings');
+  // TODO: Implement settings page
+  alert('Settings page coming soon!');
+});
+
+window.addEventListener('userLogout', () => {
+  console.log('👋 User logged out');
+  changeScreen(HOME_PAGE_SCREEN.homePageContainer);
+});
+
+// Dashboard is now fully integrated with user registration!
 
 initialRender();
