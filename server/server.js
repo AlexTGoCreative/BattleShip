@@ -1,3 +1,4 @@
+import dotenv from 'dotenv';
 import express from 'express';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
@@ -5,6 +6,12 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
+
+// Load environment variables from .env file
+dotenv.config();
+
+// Suppress deprecation warning for util._extend
+process.noDeprecation = true;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -24,7 +31,7 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, '../dist')));
 
 // MongoDB Connection
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/battleship-multiplayer';
+const MONGODB_URI = process.env.MONGODB_URI;
 
 mongoose.connect(MONGODB_URI)
   .then(() => console.log('📦 Connected to MongoDB'))

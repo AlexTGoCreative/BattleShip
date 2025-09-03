@@ -632,6 +632,8 @@
   background: rgba(255, 255, 255, 0.1);
   padding: 0.5rem;
   border-radius: var(--border-radius-sm);
+  width: 400px;
+  height: 400px;
 }
 
 .board-cell {
@@ -941,6 +943,506 @@
   gap: 10px;
 }
 
+/* Game Mode Selection */
+.game-modes-section {
+  margin-bottom: 2rem;
+}
+
+.game-modes-buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+.game-mode-btn {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  text-align: left;
+  transition: all var(--transition-normal);
+  border: 2px solid transparent;
+  min-height: 100px;
+}
+
+.game-mode-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.game-mode-btn.btn-primary {
+  border-color: var(--primary-color);
+}
+
+.game-mode-icon {
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.game-mode-text {
+  flex: 1;
+}
+
+.game-mode-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.game-mode-desc {
+  font-size: 0.875rem;
+  opacity: 0.8;
+}
+
+/* AI Game Setup Styles */
+.ai-game-setup {
+  color: var(--text-primary);
+}
+
+.ai-info-section {
+  width: 100%;
+}
+
+.ai-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--secondary-color), var(--info-color));
+  font-size: 2.5rem;
+  margin: 0 auto 1rem auto;
+}
+
+.ai-name {
+  font-size: 1.25rem;
+  color: var(--primary-color);
+}
+
+.ai-description {
+  margin: 0.5rem 0 1rem 0;
+  line-height: 1.4;
+}
+
+.ai-stats {
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: var(--border-radius-sm);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Board cell styles for ship placement */
+.board-cell.has-ship {
+  background: var(--primary-color);
+  border-color: var(--primary-dark);
+  box-shadow: 0 0 8px rgba(0, 102, 204, 0.3);
+}
+
+.board-cell[data-has-ship="true"] {
+  background: var(--primary-color);
+  border-color: var(--primary-dark);
+}
+
+.board-cell[data-mask="true"] {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* Game content wrapper */
+.game-content-wrapper {
+  min-height: 400px;
+}
+
+.game-content-wrapper .hidden {
+  display: none;
+}
+
+/* Ship Yard Styles - Original Approach with New Colors */
+.ship-yard {
+  min-height: 120px;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 2px dashed rgba(255, 255, 255, 0.2);
+  border-radius: var(--border-radius-sm);
+  position: relative;
+  margin-bottom: auto;
+  align-items: flex-start;
+  justify-content: space-around;
+}
+
+.ship {
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  padding: 0.25rem;
+  border-radius: 4px;
+  user-select: none;
+}
+
+.ship:hover {
+  transform: scale(1.05);
+}
+
+.ship.active {
+  transform: scale(1.1);
+  filter: brightness(1.2);
+}
+
+.ship.active .ship-node {
+  background-color: var(--success-color);
+  box-shadow: 0 0 8px rgba(40, 167, 69, 0.5);
+}
+
+.ship.place {
+  z-index: 2;
+}
+
+.ship.fail-place .ship-node {
+  background-color: var(--danger-color);
+  animation: shake 0.5s ease-out;
+}
+
+.ship[data-orientation='HORIZONTAL'] {
+  flex-direction: row;
+}
+
+.ship[data-orientation='VERTICAL'] {
+  flex-direction: column;
+}
+
+.ship-node {
+  background-color: var(--primary-color);
+  width: 28px;
+  height: 28px;
+  border: 2px solid var(--primary-dark);
+  border-radius: 4px;
+  transition: all var(--transition-normal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.ship-node::after {
+  content: '⚓';
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.75rem;
+}
+
+/* Instructions Card Styles */
+.instructions-card {
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.instructions-header {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 1rem;
+}
+
+.instructions-icon {
+  font-size: 1.5rem;
+}
+
+.instructions-title {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.instructions-list {
+  margin-top: 1rem;
+}
+
+.instruction-item {
+  padding: 0.5rem 0;
+  transition: all var(--transition-normal);
+}
+
+.instruction-item:hover {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 4px;
+  padding-left: 0.5rem;
+}
+
+.instruction-icon {
+  font-size: 1.25rem;
+  width: 2rem;
+  text-align: center;
+}
+
+.instruction-text {
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+/* Board interaction styles */
+.board-cell.valid-drop {
+  background: rgba(40, 167, 69, 0.3) !important;
+  border-color: var(--success-color) !important;
+  box-shadow: 0 0 8px rgba(40, 167, 69, 0.5);
+}
+
+.board-cell.invalid-drop {
+  background: rgba(220, 53, 69, 0.3) !important;
+  border-color: var(--danger-color) !important;
+  box-shadow: 0 0 8px rgba(220, 53, 69, 0.5);
+}
+
+/* Removed duplicate - using the main .board-grid rule above */
+
+/* Modal styles for AI difficulty */
+.ai-difficulty-modal {
+  border: none;
+  border-radius: var(--border-radius);
+  backdrop-filter: blur(10px);
+  background: transparent;
+  max-width: 500px;
+  width: 90%;
+}
+
+.ai-difficulty-modal::backdrop {
+  background: rgba(26, 26, 46, 0.8);
+  backdrop-filter: blur(5px);
+}
+
+.difficulty-option {
+  transition: all var(--transition-normal);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  text-align: left;
+}
+
+.difficulty-option:hover {
+  border-color: var(--primary-color);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.difficulty-option.selected {
+  border-color: var(--primary-color);
+  background: rgba(0, 102, 204, 0.1);
+}
+
+.difficulty-icon {
+  font-size: 2.5rem;
+  flex-shrink: 0;
+}
+
+.difficulty-content {
+  flex: 1;
+}
+
+.difficulty-title {
+  font-size: 1.25rem;
+  margin-bottom: 0.25rem;
+}
+
+.difficulty-desc {
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
+}
+
+.difficulty-stats {
+  font-size: 0.75rem;
+  opacity: 0.8;
+}
+
+/* AI Game Play Styles */
+.ai-game-play {
+  color: var(--text-primary);
+}
+
+.game-header {
+  padding: 1rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.game-title {
+  margin: 0;
+  font-size: 2rem;
+}
+
+.game-status {
+  min-width: 150px;
+}
+
+.status-text {
+  font-weight: 600;
+  margin-right: 0.5rem;
+}
+
+.turn-indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--muted-color);
+  transition: all var(--transition-normal);
+}
+
+.turn-indicator.active {
+  background: var(--success-color);
+  box-shadow: 0 0 8px rgba(40, 167, 69, 0.5);
+}
+
+.game-main {
+  flex: 1;
+  min-height: 0;
+}
+
+.player-section,
+.ai-section {
+  flex: 1;
+  min-width: 0;
+  padding: 1.5rem;
+}
+
+.section-header {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.section-title {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.25rem;
+}
+
+.player-status,
+.ai-status {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.game-footer {
+  padding: 1rem 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.game-info {
+  min-width: 200px;
+}
+
+.game-info-text {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.game-controls {
+  flex-shrink: 0;
+}
+
+/* Board cell states for game play */
+.board-cell.attacked {
+  pointer-events: none;
+}
+
+.board-cell.miss {
+  background: rgba(100, 100, 100, 0.5);
+  color: var(--info-color);
+}
+
+.board-cell.hit {
+  background: var(--warning-color);
+  color: white;
+  border-color: var(--warning-dark);
+}
+
+.board-cell.sunk {
+  background: var(--danger-color);
+  border-color: var(--danger-dark);
+}
+
+.ai-cell:not(.attacked):hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.05);
+}
+
+.player-cell {
+  pointer-events: none;
+}
+
+/* Additional utility classes */
+.font-weight-600 {
+  font-weight: 600;
+}
+
+.margin-top_05r {
+  margin-top: 0.5rem;
+}
+
+.margin-bottom_1r {
+  margin-bottom: 1rem;
+}
+
+.margin-bottom_2r {
+  margin-bottom: 2rem;
+}
+
+.gap_05r {
+  gap: 0.5rem;
+}
+
+.gap_1r {
+  gap: 1rem;
+}
+
+.gap_2 {
+  gap: 2px;
+}
+
+.d-flex__col {
+  display: flex;
+  flex-direction: column;
+}
+
+.align-items__center {
+  align-items: center;
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.full-height {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.padding_2r {
+  padding: 2rem;
+}
+
+.padding_1r {
+  padding: 1rem;
+}
+
+.justify-content__between {
+  justify-content: space-between;
+}
+
+.justify-content__center {
+  justify-content: center;
+}
+
+.gap_2r {
+  gap: 2rem;
+}
+
+.margin-top_2r {
+  margin-top: 2rem;
+}
+
+.text-align__center {
+  text-align: center;
+}
+
+.instructions-text {
+  background: rgba(255, 255, 255, 0.03);
+  padding: 1rem;
+  border-radius: var(--border-radius-sm);
+  border-left: 4px solid var(--info-color);
+  line-height: 1.6;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .lobby-main,
@@ -984,5 +1486,26 @@
   
   .controls-left {
     justify-content: center;
+  }
+
+  .game-modes-buttons {
+    flex-direction: column;
+  }
+
+  .game-mode-btn {
+    min-height: auto;
+    padding: 1rem;
+  }
+
+  .game-mode-icon {
+    font-size: 1.5rem;
+  }
+
+  .game-mode-title {
+    font-size: 1rem;
+  }
+
+  .game-mode-desc {
+    font-size: 0.75rem;
   }
 }

@@ -1,4 +1,5 @@
 import createElementWithClass from '../helper_module/create-element-with-class.js';
+import createAIDifficultyModal from './ai-difficulty-modal.js';
 import socketClient from '../services/socket-client.js';
 
 export default function createLobbyScreen(currentUser) {
@@ -93,12 +94,69 @@ export default function createLobbyScreen(currentUser) {
     'padding_0_2r'
   ]);
 
+  // Game modes section
+  const gameModesSection = createElementWithClass('section', [
+    'game-modes-section',
+    'glass-card',
+    'padding_2r',
+    'margin-bottom_2r'
+  ]);
+
+  const gameModesHeader = createElementWithClass('h2', [
+    'section-title',
+    'margin-bottom_2r'
+  ]);
+  gameModesHeader.textContent = 'Game Modes';
+
+  const gameModesButtons = createElementWithClass('div', [
+    'game-modes-buttons',
+    'd-flex',
+    'gap_1r'
+  ]);
+
+  const vsAIButton = createElementWithClass('button', [
+    'btn-primary',
+    'btn-lg',
+    'cursor_pointer',
+    'flex-grow',
+    'game-mode-btn'
+  ]);
+  vsAIButton.innerHTML = `
+    <div class="game-mode-icon">🤖</div>
+    <div class="game-mode-text">
+      <div class="game-mode-title">VS AI</div>
+      <div class="game-mode-desc">Battle against computer</div>
+    </div>
+  `;
+
+  const vsPlayerButton = createElementWithClass('button', [
+    'btn-secondary',
+    'btn-lg',
+    'cursor_pointer',
+    'flex-grow',
+    'game-mode-btn'
+  ]);
+  vsPlayerButton.innerHTML = `
+    <div class="game-mode-icon">👥</div>
+    <div class="game-mode-text">
+      <div class="game-mode-title">VS Player</div>
+      <div class="game-mode-desc">Challenge online players</div>
+    </div>
+  `;
+
+  gameModesButtons.appendChild(vsAIButton);
+  gameModesButtons.appendChild(vsPlayerButton);
+
+  gameModesSection.appendChild(gameModesHeader);
+  gameModesSection.appendChild(gameModesButtons);
+
   // Players section
   const playersSection = createElementWithClass('section', [
     'players-section',
     'glass-card',
     'padding_2r',
-    'flex-grow'
+    'flex-grow',
+    'hidden'
   ]);
 
   const playersSectionHeader = createElementWithClass('div', [
@@ -203,8 +261,18 @@ export default function createLobbyScreen(currentUser) {
   activitySection.appendChild(activityHeader);
   activitySection.appendChild(activityList);
 
-  mainContent.appendChild(playersSection);
-  mainContent.appendChild(activitySection);
+  const gameContentWrapper = createElementWithClass('div', [
+    'game-content-wrapper',
+    'd-flex',
+    'gap_2r',
+    'flex-grow'
+  ]);
+
+  gameContentWrapper.appendChild(playersSection);
+  gameContentWrapper.appendChild(activitySection);
+
+  mainContent.appendChild(gameModesSection);
+  mainContent.appendChild(gameContentWrapper);
 
   lobbyContainer.appendChild(header);
   lobbyContainer.appendChild(mainContent);
@@ -220,6 +288,7 @@ export default function createLobbyScreen(currentUser) {
   // State management
   let onlinePlayers = [];
   let pendingInvitations = new Set();
+  let currentGameMode = 'multiplayer'; // 'multiplayer' or 'ai'
 
   // Utility functions
   const showNotification = (message, type = 'info', duration = 4000) => {
@@ -426,10 +495,50 @@ export default function createLobbyScreen(currentUser) {
     }
   };
 
+  // Game mode switching
+  const switchToGameMode = (mode) => {
+    currentGameMode = mode;
+    
+    if (mode === 'ai') {
+      vsAIButton.classList.remove('btn-secondary');
+      vsAIButton.classList.add('btn-primary');
+      vsPlayerButton.classList.remove('btn-primary');
+      vsPlayerButton.classList.add('btn-secondary');
+      
+      playersSection.classList.add('hidden');
+      addActivity('Switched to AI mode', 'info');
+    } else {
+      vsPlayerButton.classList.remove('btn-secondary');
+      vsPlayerButton.classList.add('btn-primary');
+      vsAIButton.classList.remove('btn-primary');
+      vsAIButton.classList.add('btn-secondary');
+      
+      playersSection.classList.remove('hidden');
+      socketClient.getOnlineUsers();
+      addActivity('Switched to multiplayer mode', 'info');
+    }
+  };
+
+  // Create AI difficulty modal
+  const aiDifficultyModal = createAIDifficultyModal();
+
+  // Game mode event listeners
+  vsAIButton.addEventListener('click', () => {
+    // Show difficulty selection modal
+    switchToGameMode('ai');
+    aiDifficultyModal.show();
+  });
+
+  vsPlayerButton.addEventListener('click', () => {
+    switchToGameMode('multiplayer');
+  });
+
   // Event listeners
   refreshButton.addEventListener('click', () => {
-    socketClient.getOnlineUsers();
-    addActivity('Refreshed player list', 'info');
+    if (currentGameMode === 'multiplayer') {
+      socketClient.getOnlineUsers();
+      addActivity('Refreshed player list', 'info');
+    }
   });
 
   logoutButton.addEventListener('click', () => {
@@ -517,9 +626,16 @@ export default function createLobbyScreen(currentUser) {
   socketClient.getOnlineUsers();
   addActivity('Joined the lobby', 'player');
 
+  // Initialize with multiplayer mode
+  switchToGameMode('multiplayer');
+
   return {
     lobbyContainer,
     showNotification,
-    addActivity
+    addActivity,
+    vsAIButton,
+    vsPlayerButton,
+    switchToGameMode,
+    getCurrentGameMode: () => currentGameMode
   };
 }

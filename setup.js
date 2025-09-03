@@ -70,6 +70,28 @@ async function createDirectories() {
   }
 }
 
+async function createEnvFile() {
+  try {
+    await fs.access('.env');
+    console.log('✅ .env file already exists');
+  } catch {
+    const envContent = `# Battleship Multiplayer Environment Configuration
+
+# Server Configuration
+PORT=3000
+NODE_ENV=development
+
+# Database Configuration
+MONGODB_URI=mongodb://localhost:27017/battleship-multiplayer
+
+# Optional: Debug logging
+# DEBUG=socket.io:*`;
+
+    await fs.writeFile('.env', envContent);
+    console.log('✅ Created .env file with default configuration');
+  }
+}
+
 async function showStartupInstructions() {
   console.log('\n🎮 Setup Complete! Ready to start playing!');
   console.log('==========================================\n');
@@ -89,8 +111,9 @@ async function showStartupInstructions() {
   console.log('');
   
   console.log('MongoDB connection:');
-  console.log('  📁 Default: mongodb://localhost:27017/battleship-multiplayer');
-  console.log('  🌐 Atlas: Set MONGODB_URI environment variable');
+  console.log('  📁 Local: Check .env file for MONGODB_URI');
+  console.log('  🌐 Atlas: Update MONGODB_URI in .env file');
+  console.log('  ⚙️  Default: mongodb://localhost:27017/battleship-multiplayer');
   console.log('');
   
   console.log('For development:');
@@ -109,6 +132,7 @@ async function main() {
     await checkMongoDB();
     await installDependencies();
     await createDirectories();
+    await createEnvFile();
     await showStartupInstructions();
   } catch (error) {
     console.error('Setup failed:', error.message);

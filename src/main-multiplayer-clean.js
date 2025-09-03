@@ -161,25 +161,13 @@ function showAIGameSetup() {
     const shipDetails = appState.gameController.humanPlayerShipDetails();
     const ships = Object.values(shipDetails);
     
-    console.log('Ship details:', shipDetails);
-    console.log('Ships array:', ships);
-    
     // Clear existing ships
     aiSetupScreen.clearAllShips();
     
-    // Place ships on UI - map ship details to ship elements by name
-    const shipElementMap = {
-      'carrier': 0,
-      'battleship': 1, 
-      'destroyer': 2,
-      'submarine': 3,
-      'patrol_boat': 4
-    };
-
-    ships.forEach((ship) => {
+    // Place ships on UI
+    ships.forEach((ship, index) => {
       if (ship.isOnBoard) {
-        const shipElementIndex = shipElementMap[ship.name];
-        const shipElement = aiSetupScreen.shipElements[shipElementIndex];
+        const shipElement = aiSetupScreen.shipElements[index];
         if (shipElement) {
           const [x, y] = ship.placeHead;
           shipElement.dataset.orientation = ship.orientation.toUpperCase();
@@ -288,8 +276,8 @@ function setupAIGameplay(gamePlayScreen) {
     ships.forEach((ship) => {
       if (ship.isOnBoard) {
         const [startX, startY] = ship.placeHead;
-        const size = ship.size;
-        const orientation = ship.orientation.toUpperCase();
+        const size = ship.shipSize;
+        const orientation = ship.orientation;
         
         for (let i = 0; i < size; i++) {
           const x = orientation === 'HORIZONTAL' ? startX + i : startX;
@@ -313,13 +301,13 @@ function setupAIGameplay(gamePlayScreen) {
     if (gameOver) return;
     
     try {
-      const { hitStatus: aiHitStatus, move } = appState.gameController.computerPlayerMove();
-      const [aiX, aiY] = move;
+      const [aiX, aiY] = appState.gameController.computerPlayerMove();
       const targetCell = playerBoardCells.find(cell => 
         parseInt(cell.dataset.x) === aiX && parseInt(cell.dataset.y) === aiY
       );
       
       if (targetCell) {
+        const aiHitStatus = appState.gameController.computerPlayerGetHitStatus();
         targetCell.classList.add('attacked');
         
         if (aiHitStatus === 0) {

@@ -275,9 +275,13 @@ export default function createLoginScreen() {
   });
 
   // Socket event listeners
-  socketClient.on('register_success', () => {
+  socketClient.on('register_success', (data) => {
     hideLoading();
-    // Will be handled by main app
+    // Dispatch custom event for main app to handle
+    const loginEvent = new CustomEvent('userLoggedIn', {
+      detail: { username: data.username }
+    });
+    window.dispatchEvent(loginEvent);
   });
 
   socketClient.on('register_error', (data) => {
