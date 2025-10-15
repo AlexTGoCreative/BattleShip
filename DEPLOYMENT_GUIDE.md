@@ -218,8 +218,25 @@ git push origin main
 ```
 Then trigger a new deployment on Render.
 
-### Issue: Socket.IO Connection Fails
-**Solution:** Ensure WebSocket support on your hosting platform
+### Issue: Socket.IO Connection Fails / WebSocket Error
+**Solution:** This usually happens when the frontend can't connect to the backend. Check:
+
+1. **Environment Detection Issue:**
+   - Open browser DevTools → Console
+   - Look for: `🌍 Environment: production` message
+   - If it shows `development`, the environment detection failed
+
+2. **Fix Environment Detection:**
+   - The frontend should auto-detect production environment
+   - If not working, check your deployed URL in browser console
+
+3. **CORS Configuration:**
+   - Make sure your Render app URL is allowed in CORS
+   - The server should auto-configure this, but verify in logs
+
+4. **WebSocket Support:**
+   - Render supports WebSockets ✅
+   - Check that your app is using HTTPS (not HTTP)
 
 ### Issue: MongoDB Connection Error  
 **Solution:** Verify your MongoDB URI and whitelist hosting platform IPs
@@ -235,6 +252,32 @@ Then trigger a new deployment on Render.
 1. Push latest changes to GitHub
 2. On Render: Go to your service → Settings → "Manual Deploy" → "Clear build cache"
 3. Redeploy
+
+### Issue: "websocket error" in console - App deployed but can't connect
+**This is the most common issue after successful deployment.**
+
+**Quick Fix:**
+1. **Push the updated environment detection:**
+   ```bash
+   git add .
+   git commit -m "Fix environment detection for production"
+   git push origin main
+   ```
+
+2. **Check browser console on your deployed app:**
+   - Open: `https://your-app.onrender.com`
+   - Press F12 → Console tab
+   - Look for: `🌍 Environment: production` 
+   - Should show your Render URL, not localhost
+
+3. **If still showing localhost:**
+   - Hard refresh: Ctrl+Shift+R (Windows) or Cmd+Shift+R (Mac)
+   - Clear browser cache
+   - Try incognito/private browsing
+
+4. **Verify Render deployment:**
+   - Check health endpoint: `https://your-app.onrender.com/health`
+   - Should return: `{"status": "OK", "mongodb": "Connected"}`
 
 ---
 

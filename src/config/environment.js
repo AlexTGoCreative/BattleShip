@@ -14,13 +14,20 @@ const config = {
   }
 };
 
-// Detect environment - check if we're running on localhost
-const isProduction = !window.location.hostname.includes('localhost') && 
-                     !window.location.hostname.includes('127.0.0.1') &&
-                     window.location.protocol === 'https:';
+// Detect environment - check if we're running on localhost or production
+const isLocalhost = window.location.hostname.includes('localhost') || 
+                    window.location.hostname.includes('127.0.0.1') ||
+                    window.location.hostname.includes('0.0.0.0');
+
+const isProduction = !isLocalhost;
 
 const currentEnv = isProduction ? 'production' : 'development';
 
-console.log(`🌍 Environment: ${currentEnv}`, config[currentEnv]);
+console.log(`🌍 Environment: ${currentEnv}`, {
+  hostname: window.location.hostname,
+  protocol: window.location.protocol,
+  origin: window.location.origin,
+  config: config[currentEnv]
+});
 
 export default config[currentEnv];
