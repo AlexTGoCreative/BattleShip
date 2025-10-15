@@ -209,6 +209,15 @@ FRONTEND_URL=https://your-app-domain.com
 
 ## 🚨 Common Issues & Solutions
 
+### Issue: Build fails with "babel: not found" on Render
+**Solution:** Make sure you've pushed the latest code to GitHub. The build script has been updated to use webpack only:
+```bash
+git add .
+git commit -m "Fix build script for deployment"
+git push origin main
+```
+Then trigger a new deployment on Render.
+
 ### Issue: Socket.IO Connection Fails
 **Solution:** Ensure WebSocket support on your hosting platform
 
@@ -220,6 +229,12 @@ FRONTEND_URL=https://your-app-domain.com
 
 ### Issue: Environment Variables Not Set
 **Solution:** Verify all required env vars are configured on your platform
+
+### Issue: Old build script cached on deployment platform
+**Solution:** 
+1. Push latest changes to GitHub
+2. On Render: Go to your service → Settings → "Manual Deploy" → "Clear build cache"
+3. Redeploy
 
 ---
 
