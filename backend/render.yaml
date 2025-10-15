@@ -1,0 +1,26 @@
+# Render deployment configuration for Battleship Backend
+services:
+  - type: web
+    name: battleship-backend
+    env: node
+    region: oregon
+    plan: free
+    buildCommand: npm ci
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        # Replace with your actual MongoDB connection string
+        sync: false  # Set in Render dashboard for security
+      - key: JWT_SECRET  
+        # Add your JWT secret in Render dashboard
+        sync: false
+      - key: PORT
+        value: 10000  # Render's default port
+      - key: FRONTEND_URL
+        # Will be set to your Netlify URL after frontend deployment
+        sync: false
+    autoDeploy: true
+    branch: main  # Change to your main branch name if different
