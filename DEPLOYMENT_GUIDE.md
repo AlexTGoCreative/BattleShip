@@ -209,11 +209,11 @@ FRONTEND_URL=https://your-app-domain.com
 
 ## 🚨 Common Issues & Solutions
 
-### Issue: Build fails with "babel: not found" on Render
-**Solution:** Make sure you've pushed the latest code to GitHub. The build script has been updated to use webpack only:
+### Issue: Build fails with "babel: not found" or "webpack-cli must be installed"
+**Solution:** The build dependencies have been moved to production dependencies. Push the latest code:
 ```bash
 git add .
-git commit -m "Fix build script for deployment"
+git commit -m "Fix webpack-cli dependency for deployment"
 git push origin main
 ```
 Then trigger a new deployment on Render.
