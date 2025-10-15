@@ -37,19 +37,20 @@ export default function createTutorialPage() {
   const genericContainer = createElementWithClass('div', [
     'container',
     'd-flex__col',
-    'padding_2r',
-    'gap_1r',
+    'padding_10',
+    'gap_5',
   ]);
 
   const pageHeaderContainer = createElementWithClass('div', [
     'd-flex__row',
     'align-items__center',
-    'justify-content__space-around',
+    'justify-content__center',
   ]);
 
   const pageHeader = createElementWithClass('h1', [
     'text-align__center',
     'text-transform__capitalize',
+    'fz_2r',
   ]);
 
   pageHeader.textContent = 'how to play';
@@ -61,8 +62,8 @@ export default function createTutorialPage() {
 
   const tutorialList = createElementWithClass('ul', [
     'd-flex__col',
-    'gap_2r',
-    'padding_2r',
+    'gap_1r',
+    'padding_10',
     'tutorial-container',
     'align-items__center',
   ]);
@@ -74,11 +75,12 @@ export default function createTutorialPage() {
     const h2 = createElementWithClass('h2', [
       'text-transform__lowercase',
       'text-align__center',
+      'fz_1-8r',
     ]);
-    const p = createElementWithClass('p');
+    const p = createElementWithClass('p', ['fz_1-4r']);
     const container = createElementWithClass('article', [
       'd-flex__col',
-      'gap_1r',
+      'gap_5',
     ]);
 
     h2.textContent = header;
@@ -91,30 +93,35 @@ export default function createTutorialPage() {
     tutorialList.appendChild(li);
   });
 
-  const homeBtn = createElementWithClass('button', [
+  // Create go back button at the bottom
+  const goBackBtn = createElementWithClass('button', [
     'btn',
-    'icon_container',
-    'd-flex__col',
-    'centered_flex',
+    'tutorial-go-back-btn',
+    'd-flex__row',
+    'align-items__center',
+    'justify-content__center',
+    'gap_5',
     'cursor_pointer',
   ]);
 
-  const homeImg = createElementWithClass('img', ['img']);
+  const backArrow = createElementWithClass('span');
+  backArrow.textContent = '← ';
+  
+  const backText = createElementWithClass('span');
+  backText.textContent = 'Go Back';
 
-  homeImg.src = HOME_ICON_SRC;
-  homeImg.alt = '';
-
-  homeBtn.appendChild(homeImg);
+  goBackBtn.appendChild(backArrow);
+  goBackBtn.appendChild(backText);
 
   pageHeaderContainer.appendChild(pageHeader);
-  pageHeaderContainer.appendChild(homeBtn);
 
   tutorialContentContainer.appendChild(tutorialList);
+  tutorialContentContainer.appendChild(goBackBtn);
 
   genericContainer.appendChild(pageHeaderContainer);
   genericContainer.appendChild(tutorialContentContainer);
 
   tutorialPageContainer.appendChild(genericContainer);
 
-  return { tutorialPageContainer, homeBtn };
+  return { tutorialPageContainer, homeBtn: goBackBtn };
 }

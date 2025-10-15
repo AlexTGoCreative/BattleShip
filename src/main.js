@@ -738,9 +738,7 @@ HOME_PAGE_SCREEN.playBtn.addEventListener('click', () => {
 });
 
 HOME_PAGE_SCREEN.tutorialBtn.addEventListener('click', () => {
-  requireUserRegistration(() => {
-    changeScreen(TUTORIAL_PAGE_SCREEN.tutorialPageContainer);
-  });
+  changeScreen(TUTORIAL_PAGE_SCREEN.tutorialPageContainer);
 });
 
 function initialRender() {

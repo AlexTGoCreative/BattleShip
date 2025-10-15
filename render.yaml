@@ -1,0 +1,27 @@
+# Render deployment configuration
+services:
+  # Web service for the full-stack application
+  - type: web
+    name: battleship-game
+    env: node
+    region: oregon # or your preferred region
+    buildCommand: npm ci && npm run build
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        value: mongodb+srv://admin:admin123456@construction-ms.t3ekpjd.mongodb.net/?retryWrites=true&w=majority&appName=Construction-MS
+      - key: PORT
+        value: 3000
+    # Auto-deploy from GitHub
+    autoDeploy: true
+    branch: main # or your main branch name
+
+# Optional: If you prefer separate frontend/backend deployment
+# databases:
+#   - name: battleship-mongodb
+#     databaseName: battleship
+#     user: battleship_user
+#     region: oregon

@@ -1,6 +1,7 @@
 import createUserRegistration from '../dom_module/user-registration.js';
 import socketService from './socketService.js';
 import dashboardManager from './dashboardManager.js';
+import config from '../config/environment.js';
 
 class UserManager {
   constructor() {
@@ -60,7 +61,7 @@ class UserManager {
 
     // Cancel button
     cancelButton.addEventListener('click', () => {
-      this.closeRegistrationModal();
+      this.closeRegistrationModal(false); // Don't execute callbacks when cancelled
     });
 
     // Input validation on typing
@@ -114,7 +115,7 @@ class UserManager {
       
       // Close modal after a delay to show success message
       setTimeout(() => {
-        this.closeRegistrationModal();
+        this.closeRegistrationModal(true); // Execute callbacks on successful registration
         // Show dashboard after successful registration
         console.log('🚀 About to show dashboard...');
         this.showDashboard();
@@ -222,7 +223,7 @@ class UserManager {
   /**
    * Close registration modal
    */
-  closeRegistrationModal() {
+  closeRegistrationModal(executeCallbacks = true) {
     if (!this.registrationModal) return;
 
     this.isModalShowing = false;
@@ -233,8 +234,12 @@ class UserManager {
         document.body.removeChild(this.registrationModal.registrationDialog);
       }
       
-      // Execute any pending callbacks
-      this.registrationCallbacks.forEach(callback => callback());
+      // Only execute callbacks if not cancelled (i.e., successful registration)
+      if (executeCallbacks) {
+        this.registrationCallbacks.forEach(callback => callback());
+      }
+      
+      // Always clear callbacks after closing
       this.registrationCallbacks = [];
     } catch (error) {
       console.warn('Error closing registration modal:', error);
@@ -400,7 +405,7 @@ class UserManager {
    */
   async loadOnlineUsers() {
     try {
-      const response = await fetch('http://localhost:3000/api/users/online');
+      const response = await fetch(`${config.API_URL}/api/users/online`);
       const data = await response.json();
       
       if (data.success) {

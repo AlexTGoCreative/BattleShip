@@ -1,4 +1,5 @@
 import { io } from 'socket.io-client';
+import config from '../config/environment.js';
 
 class SocketService {
   constructor() {
@@ -17,10 +18,15 @@ class SocketService {
     }
 
     try {
-      this.socket = io('http://localhost:3000', {
+      console.log(`🔌 Connecting to server: ${config.SOCKET_URL}`);
+      
+      this.socket = io(config.SOCKET_URL, {
         autoConnect: true,
-        timeout: 5000,
-        transports: ['websocket', 'polling']
+        timeout: 10000,
+        transports: ['websocket', 'polling'],
+        upgrade: true,
+        rememberUpgrade: true,
+        forceNew: false
       });
 
       this.setupEventListeners();
