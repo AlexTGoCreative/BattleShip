@@ -737,7 +737,12 @@ HOME_PAGE_SCREEN.playBtn.addEventListener('click', () => {
   });
 });
 
+// Add event listeners for both tutorial buttons (icon and text)
 HOME_PAGE_SCREEN.tutorialBtn.addEventListener('click', () => {
+  changeScreen(TUTORIAL_PAGE_SCREEN.tutorialPageContainer);
+});
+
+HOME_PAGE_SCREEN.tutorialTextBtn.addEventListener('click', () => {
   changeScreen(TUTORIAL_PAGE_SCREEN.tutorialPageContainer);
 });
 

@@ -103,11 +103,7 @@ class DashboardManager {
       this.handleLogout();
     });
 
-    // Settings Button
-    this.dashboard.settingsBtn.addEventListener('click', () => {
-      console.log('⚙️ Settings clicked');
-      this.handleSettings();
-    });
+
   }
 
   /**
@@ -239,14 +235,7 @@ class DashboardManager {
     }
   }
 
-  /**
-   * Handle settings
-   */
-  handleSettings() {
-    console.log('⚙️ Opening settings');
-    // Trigger settings - emit custom event
-    window.dispatchEvent(new CustomEvent('openSettings'));
-  }
+
 
   /**
    * Load online users from server

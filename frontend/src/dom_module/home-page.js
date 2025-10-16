@@ -38,23 +38,22 @@ export default function createHomePage() {
   ]);
   playBtn.textContent = 'play';
 
-  // const settingsBtn = createElementWithClass('button', [
-  //   'btn',
-  //   'settings__btn',
-  //   'cursor_pointer',
-  //   'text-transform__capitalize',
-  // ]);
-
-  // settingsBtn.textContent = 'settings';
+  const tutorialBtn = createElementWithClass('button', [
+    'btn',
+    'tutorial__btn',
+    'cursor_pointer',
+    'text-transform__capitalize',
+  ]);
+  tutorialBtn.textContent = 'tutorial';
 
   homePageBtnGroup.appendChild(playBtn);
-  // homePageBtnGroup.appendChild(settingsBtn);
+  homePageBtnGroup.appendChild(tutorialBtn);
 
   const tutorialBtnContainer = createElementWithClass('div', [
     'tutorial-btn-container',
   ]);
 
-  const tutorialBtn = createElementWithClass('button', [
+  const tutorialIconBtn = createElementWithClass('button', [
     'btn',
     'cursor_pointer',
     'icon_container',
@@ -64,8 +63,8 @@ export default function createHomePage() {
   tutorialImg.src = TUTORIAL_ICON_SRC;
   tutorialImg.alt = '';
 
-  tutorialBtn.appendChild(tutorialImg);
-  tutorialBtnContainer.appendChild(tutorialBtn);
+  tutorialIconBtn.appendChild(tutorialImg);
+  tutorialBtnContainer.appendChild(tutorialIconBtn);
 
   genericContainer.appendChild(h1);
   genericContainer.appendChild(homePageBtnGroup);
@@ -73,5 +72,5 @@ export default function createHomePage() {
 
   homePageContainer.appendChild(genericContainer);
 
-  return { homePageContainer, playBtn, tutorialBtn };
+  return { homePageContainer, playBtn, tutorialBtn: tutorialIconBtn, tutorialTextBtn: tutorialBtn };
 }

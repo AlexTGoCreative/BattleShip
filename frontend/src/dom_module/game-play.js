@@ -236,12 +236,7 @@ export default function createGamePlayPage() {
     'btn-group-container',
   ]);
 
-  // const settingsIconContainer = createElementWithClass('button', [
-  //   'btn',
-  //   'settings-btn',
-  //   'icon_container',
-  //   'cursor_pointer',
-  // ]);
+
 
   // const settingsIconImg = createElementWithClass('img', ['img']);
 
