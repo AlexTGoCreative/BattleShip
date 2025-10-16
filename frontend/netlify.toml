@@ -1,7 +1,7 @@
 # Netlify deployment configuration for Battleship Frontend
 [build]
   base = "frontend"
-  publish = "frontend/dist"
+  publish = "dist"
   command = "npm ci && npm run build"
 
 [build.environment]

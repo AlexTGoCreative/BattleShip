@@ -87,8 +87,10 @@ echo 2. 🎨 FRONTEND (Netlify):
 echo    - Go to https://netlify.com
 echo    - Connect your GitHub repository  
 echo    - Base directory: frontend
-echo    - Build command: npm run build
-echo    - Publish directory: frontend/dist
+echo    - Build command: npm ci ^&^& npm run build
+echo    - Publish directory: dist
+echo    - Node version: 18
+echo    - NPM version: 9
 echo    - Add environment variables:
 echo      * BACKEND_URL=(your Render backend URL)
 echo.
