@@ -1,6 +1,7 @@
 import { fileURLToPath } from 'url';
 import path, { dirname } from 'path';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
+import webpack from 'webpack';
 
 const DIRNAME = dirname(fileURLToPath(import.meta.url));
 
@@ -11,6 +12,12 @@ export default {
     new HtmlWebpackPlugin({
       template: './src/index.html',
       filename: 'index.html',
+    }),
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development'),
+        BACKEND_URL: JSON.stringify(process.env.BACKEND_URL || '')
+      }
     }),
   ],
   output: {

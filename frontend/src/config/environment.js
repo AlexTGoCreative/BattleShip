@@ -2,14 +2,18 @@
 
 const config = {
   development: {
-    API_URL: 'http://localhost:3001',
-    SOCKET_URL: 'http://localhost:3001',
+    API_URL: 'http://localhost:3000',
+    SOCKET_URL: 'http://localhost:3000',
     NODE_ENV: 'development'
   },
   production: {
     // Use environment variable or fallback to default Render URL
-    API_URL: process.env.BACKEND_URL || 'https://battleship-backend-your-app.onrender.com',
-    SOCKET_URL: process.env.BACKEND_URL || 'https://battleship-backend-your-app.onrender.com',
+    API_URL: (process.env.BACKEND_URL && process.env.BACKEND_URL.trim() !== '') 
+      ? process.env.BACKEND_URL 
+      : 'https://battleship-backend-your-app.onrender.com',
+    SOCKET_URL: (process.env.BACKEND_URL && process.env.BACKEND_URL.trim() !== '') 
+      ? process.env.BACKEND_URL 
+      : 'https://battleship-backend-your-app.onrender.com',
     NODE_ENV: 'production'
   }
 };
